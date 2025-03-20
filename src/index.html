@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Spellbook</title>
+    <link rel="stylesheet" href="/src/css/style.scss">
+    <script type="module" src="/src/script/script.js"></script>
+    <script src="https://unpkg.com/@dice-roller/rpg-dice-roller/lib/umd/bundle.min.js"></script>
+</head>
+<body>
+
+    <select id="level-filter">
+        <option value="">All Levels</option>
+        <option value="0">Cantrip</option>
+        <option value="1">Level 1</option>
+        <option value="2">Level 2</option>
+        <option value="3">Level 3</option>
+        <option value="4">Level 4</option>
+        <option value="5">Level 5</option>
+        <option value="6">Level 6</option>
+        <option value="7">Level 7</option>
+        <option value="8">Level 8</option>
+        <option value="9">Level 9</option>
+    </select>
+    
+    <select id="school-filter">
+        <option value="">All Schools</option>
+        <option value="Abjuration">Abjuration</option>
+        <option value="Conjuration">Conjuration</option>
+        <option value="Divination">Divination</option>
+        <option value="Enchantment">Enchantment</option>
+        <option value="Evocation">Evocation</option>
+        <option value="Illusion">Illusion</option>
+        <option value="Necromancy">Necromancy</option>
+        <option value="Transmutation">Transmutation</option>
+    </select>
+
+    <h2>My Spell List</h2>
+<div id="my-spells"></div>
+<button id="clear-spells">Clear My Spell List</button>
+
+    <div class="spell-container">
+        <h1>Spell Library</h1>
+        <input type="text" id="search" placeholder="Search spells..." />
+        <div id="spell-list"></div>
+    </div>
+   
+    
+</body>
+</html>

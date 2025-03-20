@@ -1,0 +1,30 @@
+{
+  "name": "projekt-dt211g",
+  "version": "1.0.0",
+  "main": "index.js",
+  "source": "src/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "keywords": [],
+  "author": "Johanna Hüll",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.13.3",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
+    "events": "^3.3.0",
+    "parcel": "^2.13.3",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "string_decoder": "^1.3.0",
+    "vm-browserify": "^1.1.2"
+  },
+  "dependencies": {
+    "@dice-roller/rpg-dice-roller": "^5.5.1",
+    "axios": "^1.8.2"
+  }
+}
