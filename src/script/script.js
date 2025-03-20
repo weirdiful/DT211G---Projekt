@@ -116,6 +116,25 @@ levelFilter.addEventListener("change", filterSpells);
 schoolFilter.addEventListener("change", filterSpells);
 
 
+import { DiceRoller } from "@dice-roller/rpg-dice-roller";
+
+document.addEventListener("DOMContentLoaded", () => {
+    const diceSelect = document.getElementById("dice-select");
+    const rollButton = document.getElementById("roll-dice");
+    const resultDisplay = document.getElementById("roll-result");
+
+    rollButton.addEventListener("click", () => {
+        const diceNotation = diceSelect.value;
+        if (!diceNotation) return;
+
+        const roller = new DiceRoller();
+        const roll = roller.roll(diceNotation);
+
+        resultDisplay.textContent = `Result: ${roll.total} (${roll})`;
+    });
+});
+
+
 displaySpells(spellsData);
 displayMySpells();
 

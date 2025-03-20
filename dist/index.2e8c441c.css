@@ -135,6 +135,17 @@ button:hover {
   height: auto;
 }
 
+.header {
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  display: flex;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 4px 8px #0003;
+}
+
 @media (width <= 1024px) {
   .spell-card {
     width: calc(33.3333% - 20px);
