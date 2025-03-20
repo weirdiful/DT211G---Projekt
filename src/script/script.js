@@ -1,5 +1,6 @@
 import spellsData from '../../5e-SRD-Spells.json';
 
+
 let spellList = document.getElementById("spell-list");
 let mySpellList = document.getElementById("my-spells");
 let searchInput = document.getElementById("search");

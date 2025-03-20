@@ -614,13 +614,7 @@ function displaySpells(spells) {
         let spellElement = document.createElement("div");
         spellElement.classList.add("spell-card");
         let schoolName = spell.school.name.toLowerCase();
-        let imageUrl;
-        try {
-            imageUrl = new URL(`img/${schoolName}.jpg`, "file:///src/script/script.js").href;
-        } catch (error) {
-            console.error(`Image not found for: ${schoolName}`);
-            imageUrl = '';
-        }
+        let imageUrl = `/img/${schoolName}.jpg`;
         spellElement.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">

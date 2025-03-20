@@ -10,6 +10,9 @@
 </head>
 <body>
 
+
+        
+   
     <select id="level-filter">
         <option value="">All Levels</option>
         <option value="0">Cantrip</option>
@@ -35,6 +38,73 @@
         <option value="Necromancy">Necromancy</option>
         <option value="Transmutation">Transmutation</option>
     </select>
+
+
+    <select id="dice-select">
+        <optgroup label="d4 (max 6)">
+            <option value="1d4">1d4</option>
+            <option value="2d4">2d4</option>
+            <option value="3d4">3d4</option>
+            <option value="4d4">4d4</option>
+            <option value="5d4">5d4</option>
+            <option value="6d4">6d4</option>
+        </optgroup>
+    
+        <optgroup label="d6 (max 12)">
+            <option value="1d6">1d6</option>
+            <option value="2d6">2d6</option>
+            <option value="3d6">3d6</option>
+            <option value="4d6">4d6</option>
+            <option value="5d6">5d6</option>
+            <option value="6d6">6d6</option>
+            <option value="7d6">7d6</option>
+            <option value="8d6">8d6</option>
+            <option value="9d6">9d6</option>
+            <option value="10d6">10d6</option>
+            <option value="11d6">11d6</option>
+            <option value="12d6">12d6</option>
+        </optgroup>
+    
+        <optgroup label="d8 (max 12)">
+            <option value="1d8">1d8</option>
+            <option value="2d8">2d8</option>
+            <option value="3d8">3d8</option>
+            <option value="4d8">4d8</option>
+            <option value="5d8">5d8</option>
+            <option value="6d8">6d8</option>
+            <option value="7d8">7d8</option>
+            <option value="8d8">8d8</option>
+            <option value="9d8">9d8</option>
+            <option value="10d8">10d8</option>
+            <option value="11d8">11d8</option>
+            <option value="12d8">12d8</option>
+        </optgroup>
+    
+        <optgroup label="d10 (max 12)">
+            <option value="1d10">1d10</option>
+            <option value="2d10">2d10</option>
+            <option value="3d10">3d10</option>
+            <option value="4d10">4d10</option>
+            <option value="5d10">5d10</option>
+            <option value="6d10">6d10</option>
+            <option value="7d10">7d10</option>
+            <option value="8d10">8d10</option>
+            <option value="9d10">9d10</option>
+            <option value="10d10">10d10</option>
+            <option value="11d10">11d10</option>
+            <option value="12d10">12d10</option>
+        </optgroup>
+    
+        <optgroup label="d12 (max 4)">
+            <option value="1d12">1d12</option>
+            <option value="2d12">2d12</option>
+            <option value="3d12">3d12</option>
+            <option value="4d12">4d12</option>
+        </optgroup>
+    </select>
+    <button id="roll-dice">Roll</button>
+    <p id="roll-result"></p>
+
 
     <h2>My Spell List</h2>
 <div id="my-spells"></div>
