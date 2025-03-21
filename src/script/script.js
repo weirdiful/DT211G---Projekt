@@ -1,5 +1,26 @@
 import spellsData from '../../5e-SRD-Spells.json';
 
+import abjurationIMG from '../img/abjuration.png';
+import conjurationIMG from '../img/conjuration.png';
+import divinationIMG from '../img/divination.png';
+import enchantmentIMG from '../img/enchantment.png';
+import evocationIMG from '../img/evocation.png';
+import illusionIMG from '../img/illusion.jpg';
+import necromancyIMG from '../img/necromancy.jpg';
+import transmutationIMG from '../img/transmutation.jpg';
+
+
+const schoolImages = {
+    abjuration: abjurationIMG,
+    conjuration: conjurationIMG,
+    divination: divinationIMG,
+    enchantment: enchantmentIMG,
+    evocation: evocationIMG,
+    illusion: illusionIMG,
+    necromancy: necromancyIMG,
+    transmutation: transmutationIMG,
+
+}
 
 let spellList = document.getElementById("spell-list");
 let mySpellList = document.getElementById("my-spells");
@@ -7,6 +28,8 @@ let searchInput = document.getElementById("search");
 let levelFilter = document.getElementById("level-filter");
 let schoolFilter = document.getElementById("school-filter");
 let clearSpellsBtn = document.getElementById("clear-spells");
+
+
 
 // Hämta sparade spells från localStorage
 let mySpells = JSON.parse(localStorage.getItem("mySpells")) || [];
@@ -20,7 +43,7 @@ function displaySpells(spells) {
 
         let schoolName = spell.school.name.toLowerCase();  
 
-        let imageUrl = `/img/${schoolName}.jpg`;
+        let imageUrl = schoolImages[schoolName];
 
         spellElement.innerHTML = `
             <div class="card-inner">

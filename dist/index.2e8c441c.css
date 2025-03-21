@@ -147,6 +147,7 @@ button:hover {
 
 .header {
   z-index: 1000;
+  background-color: var(--bg-color);
   justify-content: space-around;
   align-items: center;
   padding: 10px;
