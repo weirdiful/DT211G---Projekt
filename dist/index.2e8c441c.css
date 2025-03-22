@@ -1,3 +1,4 @@
+@import "https://fonts.cdnfonts.com/css/dungeon";
 :root {
   --bg-color: #1c1815;
   --text-color: #f3f6f5;
@@ -16,7 +17,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  font-family: Arial, sans-serif;
+  font-family: Dungeon, sans-serif;
 }
 
 .spell-container {

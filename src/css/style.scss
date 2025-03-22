@@ -1,8 +1,12 @@
 @use 'theme';
 
+@import url('https://fonts.cdnfonts.com/css/dungeon');
+
+                
+
 
 body {
-    font-family: Arial, sans-serif;
+    font-family:'Dungeon', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     text-align: center;
