@@ -150,10 +150,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const diceNotation = diceSelect.value;
         if (!diceNotation) return;
 
-        const roller = new DiceRoller();
-        const roll = roller.roll(diceNotation);
+        rollButton.disabled = true; 
+        resultDisplay.innerHTML = `<span class="rolling">Rolling...</span>`;
 
-        resultDisplay.textContent = `Result: ${roll.total} (${roll})`;
+        setTimeout(() => {
+            const roller = new DiceRoller();
+            const roll = roller.roll(diceNotation);
+
+        
+            let rollDetails = roll.rolls.map(r => r.value).join(", ");
+            resultDisplay.innerHTML = `
+                <p><strong>Dice:</strong> ${diceNotation}</p>
+                <p><strong>Rolled:</strong> ${roll.total} (${roll})</p>
+            `;
+
+            rollButton.disabled = false;
+        }, 1000);
     });
 });
 
