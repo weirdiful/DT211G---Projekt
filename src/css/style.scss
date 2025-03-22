@@ -159,6 +159,34 @@ button:hover {
     object-fit: cover; 
 }
 
+select {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 10px;
+    border: 2px solid var(--accent-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+select:hover {
+    background-color: var(--accent-color);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+option {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-size: 1rem;
+}
+
+
 .header {
     position: sticky;
     top: 0;
