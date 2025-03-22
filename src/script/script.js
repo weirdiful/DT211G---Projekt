@@ -5,9 +5,9 @@ import conjurationIMG from '../img/conjuration.png';
 import divinationIMG from '../img/divination.png';
 import enchantmentIMG from '../img/enchantment.png';
 import evocationIMG from '../img/evocation.png';
-import illusionIMG from '../img/illusion.jpg';
-import necromancyIMG from '../img/necromancy.jpg';
-import transmutationIMG from '../img/transmutation.jpg';
+import illusionIMG from '../img/illusion.png';
+import necromancyIMG from '../img/necromancy.png';
+import transmutationIMG from '../img/transmutation.png';
 
 
 const schoolImages = {

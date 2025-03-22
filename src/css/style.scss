@@ -7,6 +7,10 @@ body {
     color: var(--text-color);
     text-align: center;
     background-image: url(/src/img/2560x1600-terrain-wa.jpg);
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
 }
 
 .spell-container {

@@ -12,6 +12,10 @@ body {
   color: var(--text-color);
   text-align: center;
   background-image: url("2560x1600-terrain-wa.647dd0ec.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
   font-family: Arial, sans-serif;
 }
 
