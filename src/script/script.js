@@ -145,6 +145,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const diceSelect = document.getElementById("dice-select");
     const rollButton = document.getElementById("roll-dice");
     const resultDisplay = document.getElementById("roll-result");
+    const sidebar = document.getElementById("dice-sidebar");
+    const toggleSidebar = document.getElementById("toggle-sidebar");
+    const closeSidebar = document.getElementById("close-sidebar");
+
+  function openSidebar() {
+    sidebar.classList.add("open");
+}
+
+function closeSidebarFunc() {
+    sidebar.classList.remove("open");
+}
+
+
+function closeOnOutsideClick(event) {
+    if (!sidebar.contains(event.target) && !toggleSidebar.contains(event.target)) {
+        closeSidebarFunc();
+    }
+}
+
+toggleSidebar.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openSidebar();
+});
+
+closeSidebar.addEventListener("click", closeSidebarFunc);
+
+document.addEventListener("click", closeOnOutsideClick);
+
+sidebar.addEventListener("click", (event) => {
+    event.stopPropagation();
+});
+
+
 
     rollButton.addEventListener("click", () => {
         const diceNotation = diceSelect.value;
