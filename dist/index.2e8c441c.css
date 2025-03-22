@@ -17,7 +17,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  font-family: Dungeon, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 .spell-container {
@@ -96,6 +96,7 @@ input {
   background: var(--secondary-color);
   color: var(--text-color);
   justify-content: center;
+  font-family: Dungeon, sans-serif;
 }
 
 .card-back {
@@ -117,7 +118,7 @@ input {
 .card-back p {
   color: var(--text-color);
   margin: 5px 0;
-  font-size: .9rem;
+  font-size: 1rem;
 }
 
 .card-back::-webkit-scrollbar {
