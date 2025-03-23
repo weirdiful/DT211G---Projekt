@@ -692,7 +692,7 @@ function addSpellToMyList(spell) {
     }
 }
 function sortAndSaveSpells() {
-    mySpells.sort((a, b)=>a.name.localeCompare(b.name)); // Sort by name
+    mySpells.sort((a, b)=>a.name.localeCompare(b.name));
     localStorage.setItem("mySpells", JSON.stringify(mySpells));
 }
 // Funktion för att visa användarens spell-lista
