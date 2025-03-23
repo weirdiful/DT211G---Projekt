@@ -145,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const diceSelect = document.getElementById("dice-select");
     const rollButton = document.getElementById("roll-dice");
     const resultDisplay = document.getElementById("roll-result");
+    const clearButton = document.getElementById("clear-results");
     const sidebar = document.getElementById("dice-sidebar");
     const toggleSidebar = document.getElementById("toggle-sidebar");
     const closeSidebar = document.getElementById("close-sidebar");
@@ -199,6 +200,9 @@ sidebar.addEventListener("click", (event) => {
 
             rollButton.disabled = false;
         }, 1000);
+    });
+    clearButton.addEventListener("click", () => {
+        resultDisplay.innerHTML = "";
     });
 });
 
