@@ -97,30 +97,51 @@ function filterSpells() {
 function addSpellToMyList(spell) {
     if (!mySpells.some(sp => sp.index === spell.index)) {
         mySpells.push(spell);
-        localStorage.setItem("mySpells", JSON.stringify(mySpells));
+        sortAndSaveSpells();
         displayMySpells();
     }
 }
 
+function sortAndSaveSpells() {
+    mySpells.sort((a, b) => a.name.localeCompare(b.name)); // Sort by name
+    localStorage.setItem("mySpells", JSON.stringify(mySpells));
+}
+
 // Funktion för att visa användarens spell-lista
 function displayMySpells() {
-    mySpellList.innerHTML = ""; // Rensa innan rendering
+    mySpellList.innerHTML = "";
+
+    if (mySpells.length === 0) {
+        mySpellList.innerHTML = `<p class="empty-list">Your spell list is empty.</p>`;
+        return;
+    }
+
+    const ul = document.createElement("ul");
+    ul.classList.add("spell-list");
+
     mySpells.forEach(spell => {
-        const spellElement = document.createElement("div");
-        spellElement.classList.add("spell");
-        spellElement.innerHTML = `
-            <h3>${spell.name}</h3>
-            <button class="remove-spell" data-index="${spell.index}">Remove</button>
+        const li = document.createElement("li");
+        li.classList.add("spell-item");
+
+        li.innerHTML = `
+            <span class="spell-name"><strong>${spell.name}</strong></span>
+            <span class="spell-details">Level ${spell.level} - ${spell.range}</span>
+            <button class="remove-spell" data-index="${spell.index}">✖</button>
         `;
-        mySpellList.appendChild(spellElement);
+        ul.appendChild(li);
     });
 
-    // Lägg till event listeners på "Remove"-knappar
+    mySpellList.appendChild(ul);
+    addRemoveEventListeners();
+}
+
+// Function to add remove event listeners
+function addRemoveEventListeners() {
     document.querySelectorAll(".remove-spell").forEach(button => {
         button.addEventListener("click", (e) => {
             const spellIndex = e.target.dataset.index;
             mySpells = mySpells.filter(sp => sp.index !== spellIndex);
-            localStorage.setItem("mySpells", JSON.stringify(mySpells));
+            sortAndSaveSpells();
             displayMySpells();
         });
     });
@@ -128,9 +149,11 @@ function displayMySpells() {
 
 // Funktion för att rensa hela spell-listan
 clearSpellsBtn.addEventListener("click", () => {
-    mySpells = [];
-    localStorage.setItem("mySpells", JSON.stringify(mySpells));
-    displayMySpells();
+    if (confirm("Are you sure you want to clear your spell list?")) {
+        mySpells = [];
+        localStorage.setItem("mySpells", JSON.stringify(mySpells));
+        displayMySpells();
+    }
 });
 
 // Event listeners för sökning och filtrering
