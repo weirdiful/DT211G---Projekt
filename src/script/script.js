@@ -9,7 +9,10 @@ import illusionIMG from '../img/illusion.png';
 import necromancyIMG from '../img/necromancy.png';
 import transmutationIMG from '../img/transmutation.png';
 
-
+/**
+ * Kopplar skolnamn till motsvarande bild för att kunna använda dessa.
+ */
+ 
 const schoolImages = {
     abjuration: abjurationIMG,
     conjuration: conjurationIMG,
@@ -31,10 +34,12 @@ let clearSpellsBtn = document.getElementById("clear-spells");
 
 
 
-// Hämta sparade spells från localStorage
 let mySpells = JSON.parse(localStorage.getItem("mySpells")) || [];
 
-// Funktion för att visa spells
+/**
+ * Visar en lista över alla spells baserat på datan i json filen 
+ * @param {Array} spells - Array med de spells som ska visas
+ */
 function displaySpells(spells) {
     spellList.innerHTML = ""; 
     spells.forEach(spell => {
@@ -65,7 +70,7 @@ function displaySpells(spells) {
         spellList.appendChild(spellElement);
     });
 
-    // Lägg till event listeners på knapparna
+    
     document.querySelectorAll(".add-spell").forEach(button => {
         button.addEventListener("click", (e) => {
             const spellIndex = e.target.dataset.index;
@@ -76,7 +81,9 @@ function displaySpells(spells) {
 }
 
 
-// Funktion för att filtrera spells
+/**
+ * Funktion för att filtrera spells baserat på sökord, nivå eller skola.
+ */
 function filterSpells() {
     const searchTerm = searchInput.value.toLowerCase();
     const selectedLevel = levelFilter.value;
@@ -93,7 +100,10 @@ function filterSpells() {
     displaySpells(filteredSpells);
 }
 
-// Funktion för att lägga till en spell i listan
+/**
+ * Lägger till en spell i användarens egen lista om den inte finns med
+ * @param {Object} spell 
+ */
 function addSpellToMyList(spell) {
     if (!mySpells.some(sp => sp.index === spell.index)) {
         mySpells.push(spell);
@@ -102,12 +112,17 @@ function addSpellToMyList(spell) {
     }
 }
 
+/**
+ * Sorterar de spells man sparat i sin lista i alfabetisk ordning och sparar dem i localStorage
+ */
 function sortAndSaveSpells() {
     mySpells.sort((a, b) => a.name.localeCompare(b.name)); 
     localStorage.setItem("mySpells", JSON.stringify(mySpells));
 }
 
-// Funktion för att visa användarens spell-lista
+/**
+ * Visar sparade spells i sin lista
+ */
 function displayMySpells() {
     mySpellList.innerHTML = "";
 
@@ -135,7 +150,9 @@ function displayMySpells() {
     addRemoveEventListeners();
 }
 
-// Function to add remove event listeners
+/**
+ * Eventlyssnare för att kunna ta bort spells från sin lista
+ */
 function addRemoveEventListeners() {
     document.querySelectorAll(".remove-spell").forEach(button => {
         button.addEventListener("click", (e) => {
@@ -147,7 +164,9 @@ function addRemoveEventListeners() {
     });
 }
 
-// Funktion för att rensa hela spell-listan
+/**
+ * Eventlyssnare för att kunna rensa hela listan, men en adderad bekräftelse så att man inte råkar rensa hela listan av misstag
+ */
 clearSpellsBtn.addEventListener("click", () => {
     if (confirm("Are you sure you want to clear your spell list?")) {
         mySpells = [];
@@ -156,7 +175,7 @@ clearSpellsBtn.addEventListener("click", () => {
     }
 });
 
-// Event listeners för sökning och filtrering
+
 searchInput.addEventListener("input", filterSpells);
 levelFilter.addEventListener("change", filterSpells);
 schoolFilter.addEventListener("change", filterSpells);
@@ -173,10 +192,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleSidebar = document.getElementById("toggle-sidebar");
     const closeSidebar = document.getElementById("close-sidebar");
 
-  function openSidebar() {
+
+/**
+ * Öppnar tärningspanelen
+ */
+function openSidebar() {
     sidebar.classList.add("open");
 }
 
+/**
+ * Stänger tärningspanelen
+ */
 function closeSidebarFunc() {
     sidebar.classList.remove("open");
 }
@@ -202,7 +228,10 @@ sidebar.addEventListener("click", (event) => {
 });
 
 
-
+/**
+ * Slår valda tärningar och visar resultatet, inklusive hur många tärningar man slagit och vilken sort
+ * Samt separata resultaten av alla slagna tärningar.
+ */
     rollButton.addEventListener("click", () => {
         const diceNotation = diceSelect.value;
         if (!diceNotation) return;

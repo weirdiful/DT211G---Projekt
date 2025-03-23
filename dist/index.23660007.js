@@ -616,7 +616,9 @@ var _necromancyPngDefault = parcelHelpers.interopDefault(_necromancyPng);
 var _transmutationPng = require("../img/transmutation.png");
 var _transmutationPngDefault = parcelHelpers.interopDefault(_transmutationPng);
 var _rpgDiceRoller = require("@dice-roller/rpg-dice-roller");
-const schoolImages = {
+/**
+ * Kopplar skolnamn till motsvarande bild för att kunna använda dessa.
+ */ const schoolImages = {
     abjuration: (0, _abjurationPngDefault.default),
     conjuration: (0, _conjurationPngDefault.default),
     divination: (0, _divinationPngDefault.default),
@@ -632,10 +634,11 @@ let searchInput = document.getElementById("search");
 let levelFilter = document.getElementById("level-filter");
 let schoolFilter = document.getElementById("school-filter");
 let clearSpellsBtn = document.getElementById("clear-spells");
-// Hämta sparade spells från localStorage
 let mySpells = JSON.parse(localStorage.getItem("mySpells")) || [];
-// Funktion för att visa spells
-function displaySpells(spells) {
+/**
+ * Visar en lista över alla spells baserat på datan i json filen 
+ * @param {Array} spells - Array med de spells som ska visas
+ */ function displaySpells(spells) {
     spellList.innerHTML = "";
     spells.forEach((spell)=>{
         let spellElement = document.createElement("div");
@@ -661,7 +664,6 @@ function displaySpells(spells) {
         `;
         spellList.appendChild(spellElement);
     });
-    // Lägg till event listeners på knapparna
     document.querySelectorAll(".add-spell").forEach((button)=>{
         button.addEventListener("click", (e)=>{
             const spellIndex = e.target.dataset.index;
@@ -670,8 +672,9 @@ function displaySpells(spells) {
         });
     });
 }
-// Funktion för att filtrera spells
-function filterSpells() {
+/**
+ * Funktion för att filtrera spells baserat på sökord, nivå eller skola.
+ */ function filterSpells() {
     const searchTerm = searchInput.value.toLowerCase();
     const selectedLevel = levelFilter.value;
     const selectedSchool = schoolFilter.value;
@@ -683,20 +686,25 @@ function filterSpells() {
     });
     displaySpells(filteredSpells);
 }
-// Funktion för att lägga till en spell i listan
-function addSpellToMyList(spell) {
+/**
+ * Lägger till en spell i användarens egen lista om den inte finns med
+ * @param {Object} spell 
+ */ function addSpellToMyList(spell) {
     if (!mySpells.some((sp)=>sp.index === spell.index)) {
         mySpells.push(spell);
         sortAndSaveSpells();
         displayMySpells();
     }
 }
-function sortAndSaveSpells() {
+/**
+ * Sorterar de spells man sparat i sin lista i alfabetisk ordning och sparar dem i localStorage
+ */ function sortAndSaveSpells() {
     mySpells.sort((a, b)=>a.name.localeCompare(b.name));
     localStorage.setItem("mySpells", JSON.stringify(mySpells));
 }
-// Funktion för att visa användarens spell-lista
-function displayMySpells() {
+/**
+ * Visar sparade spells i sin lista
+ */ function displayMySpells() {
     mySpellList.innerHTML = "";
     if (mySpells.length === 0) {
         mySpellList.innerHTML = `<p class="empty-list">Your spell list is empty.</p>`;
@@ -717,8 +725,9 @@ function displayMySpells() {
     mySpellList.appendChild(ul);
     addRemoveEventListeners();
 }
-// Function to add remove event listeners
-function addRemoveEventListeners() {
+/**
+ * Eventlyssnare för att kunna ta bort spells från sin lista
+ */ function addRemoveEventListeners() {
     document.querySelectorAll(".remove-spell").forEach((button)=>{
         button.addEventListener("click", (e)=>{
             const spellIndex = e.target.dataset.index;
@@ -728,15 +737,15 @@ function addRemoveEventListeners() {
         });
     });
 }
-// Funktion för att rensa hela spell-listan
-clearSpellsBtn.addEventListener("click", ()=>{
+/**
+ * Eventlyssnare för att kunna rensa hela listan, men en adderad bekräftelse så att man inte råkar rensa hela listan av misstag
+ */ clearSpellsBtn.addEventListener("click", ()=>{
     if (confirm("Are you sure you want to clear your spell list?")) {
         mySpells = [];
         localStorage.setItem("mySpells", JSON.stringify(mySpells));
         displayMySpells();
     }
 });
-// Event listeners för sökning och filtrering
 searchInput.addEventListener("input", filterSpells);
 levelFilter.addEventListener("change", filterSpells);
 schoolFilter.addEventListener("change", filterSpells);
@@ -748,10 +757,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const sidebar = document.getElementById("dice-sidebar");
     const toggleSidebar = document.getElementById("toggle-sidebar");
     const closeSidebar = document.getElementById("close-sidebar");
-    function openSidebar() {
+    /**
+ * Öppnar tärningspanelen
+ */ function openSidebar() {
         sidebar.classList.add("open");
     }
-    function closeSidebarFunc() {
+    /**
+ * Stänger tärningspanelen
+ */ function closeSidebarFunc() {
         sidebar.classList.remove("open");
     }
     function closeOnOutsideClick(event) {
@@ -766,7 +779,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     sidebar.addEventListener("click", (event)=>{
         event.stopPropagation();
     });
-    rollButton.addEventListener("click", ()=>{
+    /**
+ * Slår valda tärningar och visar resultatet, inklusive hur många tärningar man slagit och vilken sort
+ * Samt separata resultaten av alla slagna tärningar.
+ */ rollButton.addEventListener("click", ()=>{
         const diceNotation = diceSelect.value;
         if (!diceNotation) return;
         rollButton.disabled = true;
