@@ -1,4 +1,3 @@
-import spellsData from '../../5e-SRD-Spells.json';
 
 import abjurationIMG from '../img/abjuration.png';
 import conjurationIMG from '../img/conjuration.png';
@@ -8,6 +7,8 @@ import evocationIMG from '../img/evocation.png';
 import illusionIMG from '../img/illusion.png';
 import necromancyIMG from '../img/necromancy.png';
 import transmutationIMG from '../img/transmutation.png';
+
+import { DiceRoller } from "@dice-roller/rpg-dice-roller";
 
 /**
  * Kopplar skolnamn till motsvarande bild för att kunna använda dessa.
@@ -33,49 +34,125 @@ let schoolFilter = document.getElementById("school-filter");
 let clearSpellsBtn = document.getElementById("clear-spells");
 
 
+let spellsData = [];
 
-let mySpells = JSON.parse(localStorage.getItem("mySpells")) || [];
+async function fetchSpells() {
+    try {
+        let response = await fetch('https://www.dnd5eapi.co/api/spells');
+        let data = await response.json();
+        spellsData = data.results;
+        displaySpells(spellsData);
+
+
+
+    } catch (error) {
+        console.error("Error fetching spells:", error);
+    }
+}
+
+async function fetchSpellDetails(index) {
+    try {
+        let response = await fetch(`https://www.dnd5eapi.co/api/spells/${index}`);
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching spell details:", error);
+    }
+}
 
 /**
  * Visar en lista över alla spells baserat på datan i json filen 
  * @param {Array} spells - Array med de spells som ska visas
  */
-function displaySpells(spells) {
+async function displaySpells(spells) {
     spellList.innerHTML = ""; 
-    spells.forEach(spell => {
+    for (const spell of spells) {
+        let spellDetails = await fetchSpellDetails(spell.index); // Vänta på hämtning av detaljer
+
         let spellElement = document.createElement("div");
         spellElement.classList.add("spell-card");
 
-        let schoolName = spell.school.name.toLowerCase();  
+        let schoolName = spellDetails.school?.name ? spellDetails.school.name.toLowerCase() : "unknown";
+        let imageUrl = schoolImages[schoolName] || "";
 
-        let imageUrl = schoolImages[schoolName];
+        let minLevel = Math.min(...Object.keys(spellDetails.damage?.damage_at_slot_level || { "1": "0d0" }));
+        let damageOptions = Object.entries(spellDetails.damage?.damage_at_slot_level || {}).map(([level, dice]) => 
+            `<option value="${dice}">${level} (${dice})</option>`
+        ).join("");
+
+          let diceNotation = spellDetails.damage?.damage_at_slot_level?.["1"] || "No damage";
 
         spellElement.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
-                    <h2>${spell.name}</h2>
-                    <img src="${imageUrl}" alt="${spell.school.name} image" class="spell-image" />
+                    <h2>${spellDetails.name}</h2>
+                    <img src="${imageUrl}" alt="${spellDetails.school?.name || "Unknown"} image" class="spell-image" />
                 </div>
                 <div class="card-back">
-                    <h2>${spell.name}</h2>
-                    <p><strong>Level:</strong> ${spell.level}</p>
-                    <p><strong>School:</strong> ${spell.school.name}</p>
-                    <p><strong>Range:</strong> ${spell.range}</p>
-                    <p><strong>Components:</strong> ${spell.components.join(", ")}</p>
-                    <p>${spell.desc.join(" ")}</p>
-                    <button class="add-spell" data-index="${spell.index}">Add to My Spells</button>
+                    <h2>${spellDetails.name}</h2>
+                    <p><strong>Level:</strong> ${spellDetails.level}</p>
+                    <p><strong>School:</strong> ${spellDetails.school?.name || "Unknown"}</p>
+                    <p><strong>Range:</strong> ${spellDetails.range}</p>
+                    <p><strong>Components:</strong> ${spellDetails.components?.join(", ") || "None"}</p>
+                    <p>${spellDetails.desc?.join(" ") || "No description available."}</p>
+
+                   <p><strong>Damage:</strong></p>
+                    <select class="spell-level" data-index="${spellDetails.index}">
+                        ${damageOptions}
+                    </select>
+                    <button class="roll-damage" data-index="${spellDetails.index}">Roll Damage</button>
+                    <p class="roll-result" id="roll-result-${spellDetails.index}"></p>
                 </div>
             </div>
         `;
         spellList.appendChild(spellElement);
+    }
+
+    document.querySelectorAll(".add-spell").forEach(button => {
+        button.addEventListener("click", async (e) => {
+            const spellIndex = e.target.dataset.index;
+            const spell = await fetchSpellDetails(spellIndex);
+            addSpellToMyList(spell);
+        });
     });
 
-    
-    document.querySelectorAll(".add-spell").forEach(button => {
-        button.addEventListener("click", (e) => {
+    addRollDamageEventListeners();
+}
+
+/**
+ * Rullar skada med RPG Dice Roller
+ */
+function rollDamageAPI(diceNotation) {
+    try {
+        const roller = new DiceRoller();
+        const roll = roller.roll(diceNotation);
+        return roll.total; 
+    } catch (error) {
+        console.error("Error rolling dice:", error);
+        return "Error";
+    }
+}
+
+
+/**
+ * Eventlyssnare för att rulla skada baserat på vald nivå
+ */
+function addRollDamageEventListeners() {
+    document.querySelectorAll(".roll-damage").forEach(button => {
+        button.addEventListener("click", async (e) => {
             const spellIndex = e.target.dataset.index;
-            const spell = spellsData.find(sp => sp.index === spellIndex);
-            addSpellToMyList(spell);
+            const levelSelect = document.querySelector(`.spell-level[data-index="${spellIndex}"]`);
+            const diceNotation = levelSelect ? levelSelect.value : "0d0";
+    
+            if (!diceNotation || diceNotation === "0d0") {
+                alert("This spell has no damage roll.");
+                return;
+            }
+    
+            let rollResult = rollDamageAPI(diceNotation); 
+    
+            if (rollResult) {
+                document.getElementById(`roll-result-${spellIndex}`).innerHTML = `<strong>Rolled:</strong> ${rollResult}`;
+            }
         });
     });
 }
@@ -100,88 +177,10 @@ function filterSpells() {
     displaySpells(filteredSpells);
 }
 
-/**
- * Lägger till en spell i användarens egen lista om den inte finns med
- * @param {Object} spell 
- */
-function addSpellToMyList(spell) {
-    if (!mySpells.some(sp => sp.index === spell.index)) {
-        mySpells.push(spell);
-        sortAndSaveSpells();
-        displayMySpells();
-    }
-}
-
-/**
- * Sorterar de spells man sparat i sin lista i alfabetisk ordning och sparar dem i localStorage
- */
-function sortAndSaveSpells() {
-    mySpells.sort((a, b) => a.name.localeCompare(b.name)); 
-    localStorage.setItem("mySpells", JSON.stringify(mySpells));
-}
-
-/**
- * Visar sparade spells i sin lista
- */
-function displayMySpells() {
-    mySpellList.innerHTML = "";
-
-    if (mySpells.length === 0) {
-        mySpellList.innerHTML = `<p class="empty-list">Your spell list is empty.</p>`;
-        return;
-    }
-
-    const ul = document.createElement("ul");
-    ul.classList.add("spell-list");
-
-    mySpells.forEach(spell => {
-        const li = document.createElement("li");
-        li.classList.add("spell-item");
-
-        li.innerHTML = `
-            <span class="spell-name"><strong>${spell.name}</strong></span>
-            <span class="spell-details">Level ${spell.level} - ${spell.range}</span>
-            <button class="remove-spell" data-index="${spell.index}">✖</button>
-        `;
-        ul.appendChild(li);
-    });
-
-    mySpellList.appendChild(ul);
-    addRemoveEventListeners();
-}
-
-/**
- * Eventlyssnare för att kunna ta bort spells från sin lista
- */
-function addRemoveEventListeners() {
-    document.querySelectorAll(".remove-spell").forEach(button => {
-        button.addEventListener("click", (e) => {
-            const spellIndex = e.target.dataset.index;
-            mySpells = mySpells.filter(sp => sp.index !== spellIndex);
-            sortAndSaveSpells();
-            displayMySpells();
-        });
-    });
-}
-
-/**
- * Eventlyssnare för att kunna rensa hela listan, men en adderad bekräftelse så att man inte råkar rensa hela listan av misstag
- */
-clearSpellsBtn.addEventListener("click", () => {
-    if (confirm("Are you sure you want to clear your spell list?")) {
-        mySpells = [];
-        localStorage.setItem("mySpells", JSON.stringify(mySpells));
-        displayMySpells();
-    }
-});
-
-
 searchInput.addEventListener("input", filterSpells);
 levelFilter.addEventListener("change", filterSpells);
 schoolFilter.addEventListener("change", filterSpells);
 
-
-import { DiceRoller } from "@dice-roller/rpg-dice-roller";
 
 document.addEventListener("DOMContentLoaded", () => {
     const diceSelect = document.getElementById("dice-select");
@@ -259,6 +258,36 @@ sidebar.addEventListener("click", (event) => {
 });
 
 
-displaySpells(spellsData);
-displayMySpells();
+
+
+/**
+ * Funktion för att hantera tärningskast när en spell väljs
+ */
+async function handleSpellDamageRoll(spellIndex) {
+    const spell = await fetchSpellDetails(spellIndex);
+    
+    if (!spell || !spell.damage || !spell.damage.damage_at_slot_level) {
+        alert("This spell has no damage roll.");
+        return;
+    }
+
+    let diceNotation = spell.damage.damage_at_slot_level["1"]; 
+
+    if (!diceNotation) {
+        alert("No valid damage dice found for this spell.");
+        return;
+    }
+    let rollResult = await rollDamage(diceNotation);
+
+    if (rollResult) {
+        alert(`You rolled ${diceNotation}: ${rollResult}`);
+    }
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetchSpells();
+});
 
