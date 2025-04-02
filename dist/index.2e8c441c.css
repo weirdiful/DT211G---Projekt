@@ -20,19 +20,6 @@ body {
   font-family: Georgia, Times New Roman, Times, serif, sans-serif;
 }
 
-.spellbook {
-  background-color: #00000080;
-}
-
-.spellbook li, .spellbook ul {
-  list-style: none;
-}
-
-.spellbook h2 {
-  font-family: Dungeon, sans-serif;
-  font-size: 3rem;
-}
-
 .spell-container {
   max-width: 800px;
   margin: auto;

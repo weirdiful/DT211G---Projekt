@@ -20,19 +20,6 @@ body {
 }
 
 
-
-.spellbook {
-    li, ul {
-        list-style: none
-    }
-    background-color: rgba(0, 0, 0, 0.5);
-    h2 {
-        @include dungeon-font();
-        font-size: 3rem;
-    }
-    
-}
-
 .spell-container {
     max-width: 800px;
     margin: auto;
