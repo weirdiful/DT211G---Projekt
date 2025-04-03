@@ -40,11 +40,11 @@ async function fetchSpells() {
     try {
         let response = await fetch('https://www.dnd5eapi.co/api/spells');
         let data = await response.json();
-        spellsData = data.results;
+        spellsData = await Promise.all(data.results.map(async (spell) => {
+            return await fetchSpellDetails(spell.index);
+        }));
+
         displaySpells(spellsData);
-
-
-
     } catch (error) {
         console.error("Error fetching spells:", error);
     }
@@ -59,14 +59,11 @@ async function fetchSpellDetails(index) {
     }
 }
 
-/**
- * Visar en lista över alla spells baserat på datan i json filen 
- * @param {Array} spells - Array med de spells som ska visas
- */
+
 async function displaySpells(spells) {
     spellList.innerHTML = ""; 
     for (const spell of spells) {
-        let spellDetails = await fetchSpellDetails(spell.index); // Vänta på hämtning av detaljer
+        let spellDetails = await fetchSpellDetails(spell.index);
 
         let spellElement = document.createElement("div");
         spellElement.classList.add("spell-card");
@@ -74,12 +71,18 @@ async function displaySpells(spells) {
         let schoolName = spellDetails.school?.name ? spellDetails.school.name.toLowerCase() : "unknown";
         let imageUrl = schoolImages[schoolName] || "";
 
-        let minLevel = Math.min(...Object.keys(spellDetails.damage?.damage_at_slot_level || { "1": "0d0" }));
-        let damageOptions = Object.entries(spellDetails.damage?.damage_at_slot_level || {}).map(([level, dice]) => 
-            `<option value="${dice}">${level} (${dice})</option>`
-        ).join("");
+        let damageOptions = spellDetails.damage?.damage_at_slot_level || {};
+        let healingOptions = spellDetails.heal_at_slot_level || {};
 
-          let diceNotation = spellDetails.damage?.damage_at_slot_level?.["1"] || "No damage";
+        let hasDiceRoll = Object.keys(damageOptions).length > 0 || Object.keys(healingOptions).length > 0;
+        
+        let diceOptionsHTML = "";
+        if (hasDiceRoll) {
+            let combinedOptions = { ...damageOptions, ...healingOptions };
+            diceOptionsHTML = Object.entries(combinedOptions).map(([level, dice]) => 
+                `<option value="${dice}">${level} (${dice})</option>`
+            ).join("");
+        }
 
         spellElement.innerHTML = `
             <div class="card-inner">
@@ -95,33 +98,37 @@ async function displaySpells(spells) {
                     <p><strong>Components:</strong> ${spellDetails.components?.join(", ") || "None"}</p>
                     <p>${spellDetails.desc?.join(" ") || "No description available."}</p>
 
-                   <p><strong>Damage:</strong></p>
+                    ${hasDiceRoll ? `
+                    <p><strong>Roll:</strong></p>
                     <select class="spell-level" data-index="${spellDetails.index}">
-                        ${damageOptions}
+                        ${diceOptionsHTML}
                     </select>
-                    <button class="roll-damage" data-index="${spellDetails.index}">Roll Damage</button>
+                    <button class="roll-damage" data-index="${spellDetails.index}">Roll</button>
                     <p class="roll-result" id="roll-result-${spellDetails.index}"></p>
+                    ` : ""}
                 </div>
             </div>
         `;
+        
         spellList.appendChild(spellElement);
+
+        
+        if (hasDiceRoll) {
+            let rollButton = spellElement.querySelector(".roll-damage");
+            rollButton.addEventListener("click", async (event) => {
+                const spellIndex = event.target.dataset.index;
+                let diceNotation = spellElement.querySelector(`select[data-index="${spellIndex}"]`).value;
+                let result = rollDamage(diceNotation);
+                spellElement.querySelector(`.roll-result`).textContent = `Rolled: ${result}`;
+            });
+        }
     }
-
-    document.querySelectorAll(".add-spell").forEach(button => {
-        button.addEventListener("click", async (e) => {
-            const spellIndex = e.target.dataset.index;
-            const spell = await fetchSpellDetails(spellIndex);
-            addSpellToMyList(spell);
-        });
-    });
-
-    addRollDamageEventListeners();
 }
 
 /**
- * Rullar skada med RPG Dice Roller
+ * Rullar skada eller healing med RPG Dice Roller
  */
-function rollDamageAPI(diceNotation) {
+function rollDamage(diceNotation) {
     try {
         const roller = new DiceRoller();
         const roll = roller.roll(diceNotation);
@@ -133,43 +140,20 @@ function rollDamageAPI(diceNotation) {
 }
 
 
-/**
- * Eventlyssnare för att rulla skada baserat på vald nivå
- */
-function addRollDamageEventListeners() {
-    document.querySelectorAll(".roll-damage").forEach(button => {
-        button.addEventListener("click", async (e) => {
-            const spellIndex = e.target.dataset.index;
-            const levelSelect = document.querySelector(`.spell-level[data-index="${spellIndex}"]`);
-            const diceNotation = levelSelect ? levelSelect.value : "0d0";
-    
-            if (!diceNotation || diceNotation === "0d0") {
-                alert("This spell has no damage roll.");
-                return;
-            }
-    
-            let rollResult = rollDamageAPI(diceNotation); 
-    
-            if (rollResult) {
-                document.getElementById(`roll-result-${spellIndex}`).innerHTML = `<strong>Rolled:</strong> ${rollResult}`;
-            }
-        });
-    });
-}
 
 
 /**
  * Funktion för att filtrera spells baserat på sökord, nivå eller skola.
  */
-function filterSpells() {
+async function filterSpells() {
     const searchTerm = searchInput.value.toLowerCase();
     const selectedLevel = levelFilter.value;
-    const selectedSchool = schoolFilter.value;
+    const selectedSchool = schoolFilter.value.toLowerCase();
 
     const filteredSpells = spellsData.filter(spell => {
         const matchesSearch = spell.name.toLowerCase().includes(searchTerm);
         const matchesLevel = selectedLevel === "" || spell.level.toString() === selectedLevel;
-        const matchesSchool = selectedSchool === "" || spell.school.name === selectedSchool;
+        const matchesSchool = selectedSchool === "" || spell.school.name.toLowerCase() === selectedSchool;
 
         return matchesSearch && matchesLevel && matchesSchool;
     });
@@ -180,7 +164,6 @@ function filterSpells() {
 searchInput.addEventListener("input", filterSpells);
 levelFilter.addEventListener("change", filterSpells);
 schoolFilter.addEventListener("change", filterSpells);
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const diceSelect = document.getElementById("dice-select");
@@ -257,32 +240,6 @@ sidebar.addEventListener("click", (event) => {
     });
 });
 
-
-
-
-/**
- * Funktion för att hantera tärningskast när en spell väljs
- */
-async function handleSpellDamageRoll(spellIndex) {
-    const spell = await fetchSpellDetails(spellIndex);
-    
-    if (!spell || !spell.damage || !spell.damage.damage_at_slot_level) {
-        alert("This spell has no damage roll.");
-        return;
-    }
-
-    let diceNotation = spell.damage.damage_at_slot_level["1"]; 
-
-    if (!diceNotation) {
-        alert("No valid damage dice found for this spell.");
-        return;
-    }
-    let rollResult = await rollDamage(diceNotation);
-
-    if (rollResult) {
-        alert(`You rolled ${diceNotation}: ${rollResult}`);
-    }
-}
 
 
 
