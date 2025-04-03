@@ -139,9 +139,25 @@ input {
     border-radius: 10px;
 }
 
+.roll-result-box {
+    margin-top: 10px;
+    padding: 10px;
+    background: #94ccb9;
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid var(--secondary-color);
+    transition: transform 0.3s ease;
+}
+
+.roll-highlight {
+    transform: scale(1.1);
+}
+
 button {
     margin-top: 10px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: var(--secondary-color);
     color: white;
     border: none;

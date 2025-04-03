@@ -139,6 +139,22 @@ input {
   border-radius: 10px;
 }
 
+.roll-result-box {
+  color: #fff;
+  text-align: center;
+  border: 2px solid var(--secondary-color);
+  background: #94ccb9;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 1.2rem;
+  transition: transform .3s;
+}
+
+.roll-highlight {
+  transform: scale(1.1);
+}
+
 button {
   background: var(--secondary-color);
   color: #fff;
@@ -147,7 +163,7 @@ button {
   border-radius: 5px;
   align-self: center;
   margin-top: 10px;
-  padding: 8px 12px;
+  padding: 10px 14px;
 }
 
 button:hover {

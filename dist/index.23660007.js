@@ -692,7 +692,9 @@ async function displaySpells(spells) {
                         ${diceOptionsHTML}
                     </select>
                     <button class="roll-damage" data-index="${spellDetails.index}">Roll</button>
-                    <p class="roll-result" id="roll-result-${spellDetails.index}"></p>
+                <div class="roll-result-box" id="roll-result-${spellDetails.index}">
+                <span class="roll-result-text">No roll yet</span>
+                 </div>
                     ` : ""}
                 </div>
             </div>
@@ -704,7 +706,13 @@ async function displaySpells(spells) {
                 const spellIndex = event.target.dataset.index;
                 let diceNotation = spellElement.querySelector(`select[data-index="${spellIndex}"]`).value;
                 let result = rollDamage(diceNotation);
-                spellElement.querySelector(`.roll-result`).textContent = `Rolled: ${result}`;
+                let resultBox = spellElement.querySelector(`#roll-result-${spellIndex}`);
+                let resultText = resultBox.querySelector(".roll-result-text");
+                resultText.textContent = `Result: ${result}`;
+                resultBox.classList.add("roll-highlight");
+                setTimeout(()=>{
+                    resultBox.classList.remove("roll-highlight");
+                }, 1000);
             });
         }
     }
