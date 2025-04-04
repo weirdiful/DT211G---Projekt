@@ -33,9 +33,15 @@ let levelFilter = document.getElementById("level-filter");
 let schoolFilter = document.getElementById("school-filter");
 let clearSpellsBtn = document.getElementById("clear-spells");
 
-
+/**
+ * Håller data för alla trollformler.
+ * @type {Array<Object>}
+ */
 let spellsData = [];
 
+/**
+ * Hämtar alla trollformler från API:et.
+ */
 async function fetchSpells() {
     try {
         let response = await fetch('https://www.dnd5eapi.co/api/spells');
@@ -50,6 +56,11 @@ async function fetchSpells() {
     }
 }
 
+/**
+ * Hämtar detaljerad information om en specifik trollformel.
+ * @param {string} index - Index för trollformeln.
+ * @returns {Promise<Object>} Detaljerad information om trollformeln.
+ */
 async function fetchSpellDetails(index) {
     try {
         let response = await fetch(`https://www.dnd5eapi.co/api/spells/${index}`);
@@ -59,7 +70,10 @@ async function fetchSpellDetails(index) {
     }
 }
 
-
+/**
+ * Visar alla trollformler i spellList.
+ * @param {Array<Object>} spells - Lista över trollformler.
+ */
 async function displaySpells(spells) {
     spellList.innerHTML = ""; 
     for (const spell of spells) {
@@ -138,7 +152,9 @@ async function displaySpells(spells) {
 }
 
 /**
- * Rullar skada eller healing med RPG Dice Roller
+ * Rullar en tärning med en given notation och returnerar resultatet.
+ * @param {string} diceNotation - Notationen för tärningskastet, t.ex. "2d6".
+ * @returns {number|string} Resultatet av kastet eller "Error" vid fel.
  */
 function rollDamage(diceNotation) {
     try {
