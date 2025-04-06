@@ -24,13 +24,13 @@ body {
     max-width: 800px;
     margin: auto;
     padding: 20px;
-}
+    h1 {
+        @include dungeon-font;
+        font-size: 5rem;
+        text-shadow: 4px 4px 8px rgba(255, 255, 255, 0.9);
+        color: var(--bg-color);
 
-.spell-container h1 {
-    @include dungeon-font;
-    font-size: 5rem;
-    text-shadow: 4px 4px 8px rgba(255, 255, 255, 0.9);
-    color: var(--bg-color);
+    }
 }
 
 input {
@@ -115,20 +115,19 @@ input {
     justify-content: flex-start; 
     padding: 15px;
     overflow-y: auto; 
+    p {
+        font-size: 1rem;
+        margin: 5px 0;
+        color: var(--text-color);
+    }
 }
 
 .spell-image {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 10px;
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
 }
 
-.card-back p {
-    font-size: 1rem;
-    margin: 5px 0;
-    color: var(--text-color);
-}
 
 .card-back::-webkit-scrollbar {
     width: 5px; 
@@ -171,11 +170,7 @@ button:hover {
 }
 
 
-.spell-image {
-    width: 100%; 
-    height: auto; 
-    object-fit: cover; 
-}
+
 
 select {
     background-color: var(--secondary-color);

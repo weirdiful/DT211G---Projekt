@@ -117,17 +117,16 @@ input {
   transform: rotateY(180deg);
 }
 
-.spell-image {
-  object-fit: cover;
-  border-radius: 10px;
-  width: 100%;
-  height: 140px;
-}
-
 .card-back p {
   color: var(--text-color);
   margin: 5px 0;
   font-size: 1rem;
+}
+
+.spell-image {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
 }
 
 .card-back::-webkit-scrollbar {
@@ -168,12 +167,6 @@ button {
 
 button:hover {
   background: var(--accent-color);
-}
-
-.spell-image {
-  object-fit: cover;
-  width: 100%;
-  height: auto;
 }
 
 select {
