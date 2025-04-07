@@ -627,11 +627,9 @@ var _rpgDiceRoller = require("@dice-roller/rpg-dice-roller");
     transmutation: (0, _transmutationPngDefault.default)
 };
 let spellList = document.getElementById("spell-list");
-let mySpellList = document.getElementById("my-spells");
 let searchInput = document.getElementById("search");
 let levelFilter = document.getElementById("level-filter");
 let schoolFilter = document.getElementById("school-filter");
-let clearSpellsBtn = document.getElementById("clear-spells");
 /**
  * Håller data för alla trollformler.
  * @type {Array<Object>}
