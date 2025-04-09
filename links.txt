@@ -1,5 +1,0 @@
-Github
-https://github.com/weirdiful/DT211G---Projekt.git
-
-Hemsida:
-https://dt211g-spell-library.netlify.app/
